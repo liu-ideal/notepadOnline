@@ -2,14 +2,15 @@
   <div class="cover_wrap">
     <div class="write" :class="{active:isactive}">
   <div class="write_title">
-    <input type="text" name="" value="" placeholder="请输入记事的标题" maxlength="10">
+    <input type="text" name="" value="" placeholder="请输入记事的标题" maxlength="10" :disabled='isdisabled' v-model='mytitle' @keyup='illegalHandleMytitle'>
   </div>
   <div class="write_content">
-    <textarea name="name" placeholder="请输入要记事内容" maxlength="120"></textarea>
+    <textarea name="name" placeholder="请输入要记事内容(最多120个字符)" maxlength="120" :disabled='isdisabled' v-model='mycontent' @keyup='illegalHandleMycontent'></textarea>
   </div>
   <el-row>
-<el-button type="info" plain size='small' @click='tohid'>保存</el-button>
-<el-button type="info" plain size='small' @click='tohid'>取消</el-button>
+<el-button type="info" plain size='small' @click='tosave' v-show='isshow'>保存</el-button>
+<el-button type="info" plain size='small' @click='tohid' v-show='isshow'>取消</el-button>
+<el-button type="info" plain size='small' @click='tohid' v-show='isshowtwo'>关闭</el-button>
 </el-row>
     </div>
   </div>
@@ -19,17 +20,52 @@ export default {
   name:'alertContent',
   data(){
     return {
-    isactive:false
+    isactive:false,
+    mytitle:this.title,
+    mycontent:this.content
     }
   },
   methods:{
+  tosave(){
+    if(!this.mytitle||!this.mycontent){//验证 内容不能为空
+      this.open();
+      return;
+    };
+    this.tohid()
+
+  },
   tohid(){
     this.isactive=false;
     setTimeout(()=>{this.$emit('childValue',false)},200)
+  },
+  open() {//弹框
+        this.$alert('标题与内容均不能为空', '无效提交', {
+          confirmButtonText: '确定',
+          callback: action => {
+            this.$message({
+              type: 'info',
+              message: `请输入标题/内容`
+            });
+          }
+        });
+      },
+  illegalHandleMytitle() {//处理非法输入，直接替换为空
+    let rexp=/[<>]/g;
+    this.mytitle=this.mytitle.replace(rexp,'')
+  },
+  illegalHandleMycontent() {//处理非法输入，直接替换为空
+    let rexp=/[<>]/g;
+    this.mycontent=this.mycontent.replace(rexp,'')
   }
   },
   created:function(){
-    setTimeout(()=>{this.isactive=true},10)
+    setTimeout(()=>{this.isactive=true},100)
+  },
+  props:[
+     'isdisabled','isshow','isshowtwo','title','content'
+  ],
+  computed:{
+
   }
 }
 </script>
@@ -73,6 +109,7 @@ export default {
   height: 100%;
   line-height: 100%;
   text-indent: 15px;
+  background-color: #fff;
 }
 .write .write_content{
   width: 100%;
@@ -85,6 +122,7 @@ export default {
   text-indent: 12px;
   resize: none;
   border: none;
+  background-color: #fff;
 
 }
 .write .el-row{
