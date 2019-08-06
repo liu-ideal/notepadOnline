@@ -21,7 +21,7 @@ $result=$mysq->query($sql);
   $mysq->close();
 }
 
-$sql="UPDATE `{$mydata->user}` SET title='{$mydata->title}', content='{$mydata->content}' WHERE title='{$mydata->oldTitle}';";
+$sql="UPDATE `{$mydata->user}` SET `title`='{$mydata->title}', `content`='{$mydata->content}', `time`='{$mydata->time}' WHERE title='{$mydata->oldTitle}';";
 
 dealWith($sql);
  ?>

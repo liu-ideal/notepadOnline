@@ -23,7 +23,7 @@ if($result->num_rows>1){
   $mysq->close();
 }
 
-$sql="SELECT `title`,`content` FROM `{$mydata->user}`";
+$sql="SELECT `title`,`content`,`time`,`img` FROM `{$mydata->user}`";
 
 dealWith($sql);
  ?>

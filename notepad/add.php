@@ -23,6 +23,6 @@ $result=$mysq->query($sql);
   $mysq->close();
 }
 
-$sql="INSERT INTO `{$mydata->user}` (`title`,`content`) VALUES ('{$mydata->title}','{$mydata->content}');";
+$sql="INSERT INTO `{$mydata->user}` (`title`,`content`,`time`,`img`) VALUES ('{$mydata->title}','{$mydata->content}','{$mydata->time}','{$mydata->img}');";
 dealWith($sql);
  ?>

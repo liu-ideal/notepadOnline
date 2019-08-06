@@ -1,17 +1,20 @@
 <template>
   <div class="wrap">
     <el-form label-width="40px" class="demo-ruleForm">
-      <p><i class="iconfont icon-zhucedengluyonghuming"></i><span>用户登录</span></p>
+      <p><i class="iconfont icon-zhucedengluyonghuming"></i><span>欢迎登录</span></p>
       <el-form-item label="帐号" prop="pass">
-        <el-input type="text" autocomplete="on" placeholder='请输入登录帐号'></el-input>
+        <el-input type="text" autocomplete="on" placeholder='请输入登录帐号' v-model="login.user" maxlength='12'></el-input>
+        <div id='checkUser' v-show='voidUser'>帐号不能为空</div>
       </el-form-item>
       <el-form-item label="密码" prop="checkPass">
-        <el-input type="password" autocomplete="off" placeholder='请输入登录密码'></el-input>
+        <el-input type="password" autocomplete="off" placeholder='请输入登录密码' v-model="login.password" maxlength='12'></el-input>
+       <div id='checkPassword' v-show='voidPassword'>密码不能为空</div>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="">登录</el-button>
-        <el-button @click="">重置</el-button>
+        <el-button @click="resetForm">重置</el-button>
       </el-form-item>
+      <el-checkbox v-model="login.checked">记住帐号</el-checkbox>
     </el-form>
   <router-link to="/register" class="tologin">还没帐号？点此注册</router-link>
   </div>
@@ -22,8 +25,20 @@ export default {
   name: 'register',
   data(){
     return{
-
+       login:{
+         user:'',
+         password:'',
+         checked:false
+       },
+       voidUser:false,
+       voidPassword:false
     }
+  },
+  methods:{
+    resetForm() {
+        this.login.user='';
+        this.login.password='';
+      }
   }
 }
 </script>
@@ -68,6 +83,15 @@ export default {
   }
   .el-form-item {
     margin-bottom: 40px;
+    position: relative;
+  }
+  .el-form-item #checkUser,.el-form-item #checkPassword{
+    position: absolute;
+    height: 20px;
+    top:42px;
+    line-height: 20px;
+    color: red;
+    font-size: 14px;
   }
   .el-form {
     padding-top: 20px;
@@ -83,5 +107,9 @@ export default {
     text-decoration: underline;
     color: rgb(122, 21, 76);
   }
-
+  .el-checkbox{
+    display: block;
+    margin-top: -15px;
+    margin-left: -15px;
+  }
 </style>

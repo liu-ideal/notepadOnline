@@ -3,14 +3,14 @@
     <el-form label-width="40px">
       <p><i class="iconfont icon-yonghuzhuce"></i><span>用户注册</span></p>
       <el-form-item label="帐号" prop="pass">
-        <el-input type="text" autocomplete="on" placeholder='请输入注册帐号'></el-input>
+        <el-input type="text" autocomplete="on" placeholder='请输入注册帐号' v-model="register.user" maxlength='12'></el-input>
       </el-form-item>
       <el-form-item label="密码" >
-        <el-input type="password" autocomplete="off" placeholder='请输入注册密码'></el-input>
+        <el-input type="password" autocomplete="off" placeholder='请输入注册密码' v-model="register.password" maxlength='12'></el-input>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="">注册</el-button>
-        <el-button @click="">重置</el-button>
+        <el-button @click="resetForm">重置</el-button>
       </el-form-item>
     </el-form>
    <router-link to="/login" class="tologin">已有帐号，点此登录</router-link>
@@ -22,8 +22,17 @@ export default {
   name: 'register',
   data(){
     return{
-
+       register:{
+         user:'',
+         password:''
+       }
     }
+  },
+  methods:{
+    resetForm() {
+        this.register.user='';
+        this.register.password='';
+      }
   }
 }
 </script>
