@@ -3,11 +3,11 @@
     <el-form label-width="40px" class="demo-ruleForm">
       <p><i class="iconfont icon-zhucedengluyonghuming"></i><span>欢迎登录</span></p>
       <el-form-item label="帐号" prop="pass">
-        <el-input type="text" autocomplete="on" placeholder='请输入登录帐号' v-model="login.user" maxlength='12'></el-input>
+        <el-input type="text" autocomplete="on" placeholder='请输入登录帐号' v-model="login.user" maxlength='12' @blur='checkUser' @focus='lookCheckUser'></el-input>
         <div id='checkUser' v-show='voidUser'>帐号不能为空</div>
       </el-form-item>
       <el-form-item label="密码" prop="checkPass">
-        <el-input type="password" autocomplete="off" placeholder='请输入登录密码' v-model="login.password" maxlength='12'></el-input>
+        <el-input type="password" autocomplete="off" placeholder='请输入登录密码' v-model="login.password" maxlength='12' @blur='checkPass' @focus='lookCheckPass'></el-input>
        <div id='checkPassword' v-show='voidPassword'>密码不能为空</div>
       </el-form-item>
       <el-form-item>
@@ -38,7 +38,23 @@ export default {
     resetForm() {
         this.login.user='';
         this.login.password='';
+      },
+    checkUser(){
+      if(!this.login.user){
+        this.voidUser=true
       }
+    },
+    checkPass(){
+      if(!this.login.password){
+        this.voidPassword=true
+      }
+    },
+    lookCheckUser(){
+      this.voidUser=false
+    },
+    lookCheckPass(){
+      this.voidPassword=false
+    }
   }
 }
 </script>

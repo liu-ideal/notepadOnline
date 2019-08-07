@@ -1,5 +1,10 @@
+
+
 <?php
 //--实现注册功能接口--
+header('Access-Control-Allow-Origin:*');
+header('Access-Control-Allow-Methods:HEAD,GET,POST,OPTIONS,PATCH,PUT,DELETE');
+header('Access-Control-Allow-Headers:Origin,X-Requested-With,Authorization,Content-Type,Accept,Z-Key');
 $mypost=$_POST["data"];
 $mydata=json_decode($mypost);
 function dealWith($sql,$sqlTwo){
