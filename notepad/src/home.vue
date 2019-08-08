@@ -1,14 +1,14 @@
 <template lang="html">
   <div class="wrap">
     <div class="user_information">
-      欢迎你  用户<span>123</span>
+      欢迎你  用户 <span>{{this.$store.state.user}}</span>
     </div>
     <div class="main">
       <div class="new_build_thing">
         <el-button type="primary" icon="el-icon-edit" @click='newnotepad'>新建笔记</el-button>
       </div>
       <div class="thing_list">
-        <p v-if='false'>您还没有任何记事，点击上面按钮新建一个吧...</p>
+        <p v-if='noOne'>您还没有任何记事，点击上面按钮新建一个吧...</p>
         <ul>
           <li><p>我的第一件记事</p><span><i title="查看笔记" class="iconfont icon-chakan" @click='tolook'></i><i class="iconfont icon-xiugai" title="修改笔记" @click='torevise'></i><i><el-button id='special' class="iconfont icon-shanchu" title="删除笔记" @click='todelate'></el-button></i></span></li>
         </ul>
@@ -20,11 +20,13 @@
 <!-- <i class="iconfont icon-shanchu" title="删除笔记" @click='todelate'> -->
 <script>
 import alertContent from './alertContent'
+import axios from 'axios'
 export default {
   name:'home',
   data(){
     return {
-      toalert:true,
+      noOne:true,
+      toalert:false,
       isdisabled:false,//子组件的表单是否禁用
       isshow:true, //子组件的保存取消按钮是否显示
       isshowtwo:false,//子组件关闭按钮是否显示
@@ -74,10 +76,25 @@ export default {
               });
             });
   },
-
-
 },
-
+beforeCreate(){
+  if(!this.$store.state.user){
+    this.$router.push({path:'/login'})
+  }
+},
+created(){
+  //这里要获取来自后端传过来的数据进行展示
+  var readydata={
+    user:this.$store.state.user
+    // content:'实施的奋斗给过你我哦go诶个欧委会',
+    // time:'2019-08-02',
+    // img:img
+  };
+  var data=JSON.stringify(readydata);
+  axios.post('http://localhost:82/query_all.php','data='+data).then(res=>{
+    console.log(res);
+  })
+}
 }
 </script>
 

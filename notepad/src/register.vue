@@ -11,7 +11,7 @@
         <div id='checkPasswordd' v-show='voidPassword'>{{passTips}}</div>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" @click.stop="toRegister">注册</el-button>
+        <el-button type="primary" @click.stop="toRegister" v-loading.fullscreen.lock="fullscreenLoading">注册</el-button>
         <el-button @click="resetForm">重置</el-button>
       </el-form-item>
     </el-form>
@@ -26,6 +26,7 @@ export default {
   name: 'register',
   data(){
     return{
+      fullscreenLoading: false,
        register:{
          user:'',
          password:''
@@ -39,6 +40,20 @@ export default {
     }
   },
   methods:{
+    openFullScreen() {
+        this.fullscreenLoading = true;
+        setTimeout(() => {
+          this.fullscreenLoading = false;
+          this.open();
+          this.$router.push({path:'/login'})//跳转到登录页面
+        }, 500);
+      },
+    open(){
+        this.$message({
+          message: '恭喜你，注册成功-请登录',
+          type: 'success'
+        });
+      },
     resetForm() {
         this.register.user='';
         this.register.password='';
@@ -77,8 +92,8 @@ export default {
           return
         }
   var readydata={
-    user:'tong先生',
-    password:'5646'
+    user:this.register.user,
+    password:this.register.password
     // content:'实施的奋斗给过你我哦go诶个欧委会',
     // time:'2019-08-02',
     // img:img
@@ -91,10 +106,7 @@ export default {
       this.voidSubmit=true;
       this.afterSubmitTips='用户名已存在';
     }else{//这里表示注册成功了，应该进行相关操作了
-      setTimeout(()=>{this.$router.push({path:'/login'})},500)//跳转到登录页面
-      
-
-
+      this.openFullScreen();//loading动画 并跳转页面
     }
   })
       },
