@@ -100,6 +100,7 @@ export default {
             localStorage.setItem('user',readydata.user)
           }
           sessionStorage.setItem('user',readydata.user);
+          sessionStorage.setItem('pass',readydata.password);
           this.keepUser(readydata.user);//将VUEX中的user更新 以便在home页面使用
           this.openFullScreen();
 

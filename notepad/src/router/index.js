@@ -3,11 +3,19 @@ import register from '../register';
 import login from '../login';
 import home from '../home';
 let router = new Router({
-  routes:[
+    mode:'history',
+    routes:[
     {path: '*', redirect: '/register'},
-    {path:'/register',component:register},
-     {path:'/login',component:login},
-     {path:'/home',component:home}
+    {path:'/register',name:'register',component:register},
+     {path:'/login',name:'login',component:login},
+     {
+       path:'/home',
+       name:'home',
+     component:home,
+     meta:{
+       requireAuth:true
+     }
+   }
   ]
 });
 export default router

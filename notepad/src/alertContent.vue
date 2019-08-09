@@ -5,7 +5,12 @@
     <input type="text" name="" value="" placeholder="请输入记事的标题" maxlength="10" :disabled='isdisabled' v-model='mytitle' @keyup='illegalHandleMytitle'>
   </div>
   <div class="write_content">
-    <textarea name="name" placeholder="请输入要记事内容(最多120个字符)" maxlength="120" :disabled='isdisabled' v-model='mycontent' @keyup='illegalHandleMycontent'></textarea>
+    <textarea name="name" placeholder="请输入要记事内容(最多200个字符)" maxlength="200" :disabled='isdisabled' v-model='mycontent' @keyup='illegalHandleMycontent'></textarea>
+  </div>
+  <div class="sign">
+    <span v-if='hidSign' @click='startWrite'>写一个个性签名？</span>
+    <i class="clear" v-show='hidRename'>重写</i>
+    <canvas id="canvas" width="400" height="140" v-show='canWrite'></canvas>
   </div>
   <el-row>
 <el-button type="info" plain size='small' @click='tosave' v-show='isshow'>保存</el-button>
@@ -16,13 +21,18 @@
   </div>
 </template>
 <script>
+import docanvas from './docanvas_module.js' //引入canvas模块
 export default {
   name:'alertContent',
   data(){
     return {
     isactive:false,
     mytitle:this.title,
-    mycontent:this.content
+    mycontent:this.content,
+    hidSign:true,
+    hidRename:false,
+    canWrite:false,
+    srcc:''
     }
   },
   methods:{
@@ -56,6 +66,11 @@ export default {
   illegalHandleMycontent() {//处理非法输入，直接替换为空
     let rexp=/[<>]/g;
     this.mycontent=this.mycontent.replace(rexp,'')
+  },
+  startWrite(){
+    this.hidSign=false;
+    this.canWrite=true;
+    this.hidRename=true;
   }
   },
   created:function(){
@@ -66,6 +81,9 @@ export default {
   ],
   computed:{
 
+  },
+  mounted(){
+    docanvas('.clear')
   }
 }
 </script>
@@ -113,8 +131,37 @@ export default {
 }
 .write .write_content{
   width: 100%;
-  height: 75%;
-  margin-top: 5%;
+  height: 42%;
+  margin-top: 10px;
+}
+.write .sign{
+  width: 100%;
+  height: 37%;
+  position: relative;
+}
+.write .sign span{
+  position: absolute;
+  width: 140px;
+  height: 20px;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin:auto;
+  color: rgba(123, 176, 135,0.6);
+  cursor: pointer;
+}
+.write .sign span:hover{
+  color: rgb(8, 144, 79);
+}
+.write .sign .clear{
+  position: absolute;
+  bottom: 0;
+  right: 13px;
+  z-index: 2;
+  font-size: 14px;
+  color: rgb(154, 150, 150);
+  cursor: pointer;
 }
 .write .write_content textarea{
   width: 100%;
@@ -127,5 +174,9 @@ export default {
 }
 .write .el-row{
   text-align: center;
+}
+#canvas{
+  display: block;
+  cursor: url('./bi.png'),auto;
 }
 </style>

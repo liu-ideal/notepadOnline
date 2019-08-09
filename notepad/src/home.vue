@@ -17,7 +17,6 @@
 <alertContent v-if='toalert' @childValue='childValue' :isdisabled='isdisabled' :isshow='isshow' :isshowtwo='isshowtwo' :title='title' :content='content'/>
   </div>
 </template>
-<!-- <i class="iconfont icon-shanchu" title="删除笔记" @click='todelate'> -->
 <script>
 import alertContent from './alertContent'
 import axios from 'axios'
@@ -77,13 +76,12 @@ export default {
             });
   },
 },
-beforeCreate(){
-  if(!this.$store.state.user){
-    this.$router.push({path:'/login'})
-  }
+beforeCreate(){//这里的拦截处理感觉不严禁，等找到更好的方法再更正
+
 },
 created(){
   //这里要获取来自后端传过来的数据进行展示
+
   var readydata={
     user:this.$store.state.user
     // content:'实施的奋斗给过你我哦go诶个欧委会',
@@ -92,7 +90,7 @@ created(){
   };
   var data=JSON.stringify(readydata);
   axios.post('http://localhost:82/query_all.php','data='+data).then(res=>{
-    console.log(res);
+
   })
 }
 }
