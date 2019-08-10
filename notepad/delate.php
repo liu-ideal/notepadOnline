@@ -1,5 +1,8 @@
 <?php
 //--实现删除笔记接口--
+header('Access-Control-Allow-Origin:*');
+header('Access-Control-Allow-Methods:HEAD,GET,POST,OPTIONS,PATCH,PUT,DELETE');
+header('Access-Control-Allow-Headers:Origin,X-Requested-With,Authorization,Content-Type,Accept,Z-Key');
 $mypost=$_POST["data"];
 $mydata=json_decode($mypost);
 function dealWith($sql){
@@ -21,7 +24,7 @@ $result=$mysq->query($sql);
   $mysq->close();
 }
 
-$sql="DELETE FROM {$mydata->user} WHERE title='{$mydata->title}';";
+$sql="DELETE FROM `{$mydata->user}` WHERE title='{$mydata->title}'";
 
 dealWith($sql);
  ?>
