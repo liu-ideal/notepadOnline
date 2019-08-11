@@ -42,6 +42,6 @@ $result=$mysq->query($sql);
 }
 
 $sql="CREATE TABLE `liu`.`{$mydata->user}` ( `password` VARCHAR(20) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL , `title` VARCHAR(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL , `content` TEXT CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL ,`time` VARCHAR(20) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL, `img` TEXT CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL  ) ENGINE = InnoDB;";
-$sqlTwo="INSERT INTO `{$mydata->user}` (`password`) VALUES ('{$mydata->password}');";
+$sqlTwo="INSERT INTO `{$mydata->user}` (`password`,`title`) VALUES ('{$mydata->password}','{$mydata->title}');";
 dealWith($sql,$sqlTwo);
  ?>

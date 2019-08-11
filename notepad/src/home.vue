@@ -10,11 +10,11 @@
       <div class="thing_list">
         <p v-if='noOne'>您还没有任何记事，点击上面按钮新建一个吧...</p>
         <ul>
-          <li v-for='(item,index) in mydata'><p>{{item.title}}</p><span><i title="查看笔记" class="iconfont icon-chakan" @click='tolook(index)'></i><i class="iconfont icon-xiugai" title="修改笔记" @click='torevise'></i><i><el-button id='special' class="iconfont icon-shanchu" title="删除笔记" @click='todelate(index)'></el-button></i></span><span class="dateSpan">{{item.time}}</span></li>
+          <li v-for='(item,index) in mydata'><p>{{item.title}}</p><span><i title="查看笔记" class="iconfont icon-chakan" @click='tolook(index)'></i><i class="iconfont icon-xiugai" title="修改笔记" @click='torevise(index)'></i><i><el-button id='special' class="iconfont icon-shanchu" title="删除笔记" @click='todelate(index)'></el-button></i></span><span class="dateSpan">{{item.time}}</span></li>
         </ul>
       </div>
     </div>
-<alertContent v-if='toalert' @childValue='childValue' :isdisabled='isdisabled' :isshow='isshow' :toshow='toshow' :isshowtwo='isshowtwo' :title='title' :content='content' @myRegetData='myRegetData' :srcImfor='toChildSrc'/>
+<alertContent v-if='toalert' @childValue='childValue' :isdisabled='isdisabled' :isshow='isshow' :toshow='toshow' :isshowtwo='isshowtwo' :title='title' :content='content' @myRegetData='myRegetData' :srcImfor='toChildSrc' :neworrevise='neworrevise' :parentDATE='mydata'/>
   </div>
 </template>
 <script>
@@ -35,17 +35,20 @@ export default {
       regetData:false,
       toChildSrc:'',
       toshow:true,
+      neworrevise:'',
     }
   },
   watch:{
     mydata:function(val,oldVal){
       if(!val.length){
         this.noOne=true
+
       }else {
+
         this.noOne=false
       }
     },
-    regetData:function(val,oldVal){
+    regetData:function(val,oldVal){//这里是为了让子组件点保存的时候更新这个页面
       if(this.regetData===true){
         this.getDataFrom();
         this.regetData=false
@@ -66,13 +69,15 @@ export default {
       var data=JSON.stringify(readydata);
       axios.post('http://localhost:82/query_all.php','data='+data).then(res=>{
           if(!(res.data instanceof Array)){
+
           }else{
-            this.mydata.length=0;
+            var newdata=[];
             if(res.data.length>20){res.data.length=20}//只展示20条数据
             for(var i=1;i<res.data.length;i++){
-              this.mydata.push(res.data[i])
-              console.log(this.mydata);
+              newdata.push(res.data[i])
             }
+            this.mydata=newdata;
+
           }
 
       })
@@ -88,7 +93,10 @@ export default {
     this.toshow=true;
     this.isshowtwo=false;
     this.isdisabled=false;
-    this.toalert=true
+    this.toalert=true;
+    this.title='';
+    this.content='';
+    this.neworrevise='isNew'
   },
   tolook(index){
     this.isshow=false;
@@ -100,12 +108,16 @@ export default {
     this.content=this.mydata[index].content;
     this.toChildSrc=this.mydata[index].img
   },
-  torevise(){
+  torevise(index){
     this.toshow=false;
     this.isshow=true;
     this.isshowtwo=false;
     this.isdisabled=false;
-    this.toalert=true
+    this.toalert=true;
+    this.title=this.mydata[index].title;
+    this.content=this.mydata[index].content;
+    this.toChildSrc=this.mydata[index].img;
+    this.neworrevise='isRevise'
   },
   todelate(index){
 
@@ -119,10 +131,12 @@ export default {
                 user:this.$store.state.user,
                 title:this.mydata[index].title
               };
+              console.log('1');
               var data=JSON.stringify(readydata);
               axios.post('http://localhost:82/delate.php','data='+data).then(res=>{
               //console.log(res);
-              this.getDataFrom();
+                this.getDataFrom();
+              console.log('2');
               });
               this.$message({
                 type: 'success',

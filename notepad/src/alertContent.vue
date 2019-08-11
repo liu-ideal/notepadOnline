@@ -38,10 +38,12 @@ export default {
     canWrite:false,
     srcData:this.srcImfor,
     lookImg:false,
+    newORrevise:this.neworrevise,
+    parentDate:this.parentDATE
     }
   },
   methods:{
-  tosave(){
+  tosave(){//保存按钮
     if(!this.mytitle||!this.mycontent){//验证 内容不能为空
       this.open();
       return;
@@ -54,28 +56,66 @@ export default {
     var hour=datee.getHours().toString().length==1?0+datee.getHours().toString():datee.getHours().toString();
     var minute=datee.getMinutes().toString().length==1?0+datee.getMinutes().toString():datee.getMinutes().toString();
     var time=`${year}-${month}-${day} ${hour}:${minute}`;
-    var exppr=/\+/g
-    var imger=docanvas.srcData.replace(exppr,'%2B');//这么处理是因为后端会自动把里面的加号去掉 必须把加号保留
-    var readydata={
-      user:this.$store.state.user,
-      title:this.mytitle,
-      content:this.mycontent,
-      time:time,
-      img:imger
-    };
-    var data=JSON.stringify(readydata);
-    axios.post('http://localhost:82/add.php','data='+data).then(res=>{
-      var expr=/[\r\n]/g;
-      if(res.data.replace(expr,'')){
-        //进入到这里说明有错误信息了，这个时候应该把错误信息跟新到前端视图
-        console.log(res.data);
-      }else{
-        //这里说明新建数据成功，做个消息提示用户就行了
-        this.$emit('myRegetData',true)
-     this.open2()
+    if(this.newORrevise==='isNew'){
+      for(var k=0;k<this.parentDate.length;k++){//验证标题不能相同
+        if(this.parentDate[k].title===this.mytitle){
+            this.open4();
+            return
+        }
       }
-    })
+      var exppr=/\+/g;
+      var imger=docanvas.srcData.replace(exppr,'%2B');//这么处理是因为后端会自动把里面的加号去掉 必须把加号保留
+      var readydata={
+        user:this.$store.state.user,
+        title:this.mytitle,
+        content:this.mycontent,
+        time:time,
+        img:imger
+      };
+      var data=JSON.stringify(readydata);
+      axios.post('http://localhost:82/add.php','data='+data).then(res=>{
+        var expr=/[\r\n]/g;
+        if(res.data.replace(expr,'')){
+          //进入到这里说明有错误信息了，这个时候应该把错误信息跟新到前端视图
+          console.log(res.data);
+        }else{
+          //这里说明新建数据成功，做个消息提示用户就行了
+          this.$emit('myRegetData',true)//这里是告诉父组件需要重新请求数据了
+       this.open2()
+        }
+      })
+      docanvas.srcData='';
+    }
+    if(this.newORrevise==='isRevise'){
+      for(var k=0;k<this.parentDate.length;k++){//验证标题不能相同
+        if(this.parentDate[k].title===this.title){continue}
+        if(this.parentDate[k].title===this.mytitle){
+            this.open4();
+            return
+        }
+      }
+      var readydata={
+        user:this.$store.state.user,
+        oldTitle:this.title,
+        title:this.mytitle,
+        time:time,
+        content:this.mycontent
+      };
+      var data=JSON.stringify(readydata);
+      axios.post('http://localhost:82/update.php','data='+data).then(res=>{
+        var expr=/[\r\n]/g;
+        if(res.data.replace(expr,'')){
+          //进入到这里说明有错误信息了，这个时候应该把错误信息跟新到前端视图
+          console.log(res);
+        }else{
+          //这里说明新建数据成功，做个消息提示用户就行了
+          this.$emit('myRegetData',true)//这里是告诉父组件需要重新请求数据了
+       this.open3()
+        }
+      })
+    }
     this.tohid()
+    //---------------------
 
   },
   tohid(){
@@ -99,6 +139,23 @@ export default {
             type: 'success'
           });
         },
+        open3(){
+            this.$message({
+              message: '笔记修改成功',
+              type: 'success'
+            });
+          },
+          open4() {//弹框
+                this.$alert('标题不能与现有的重复', '无效提交', {
+                  confirmButtonText: '确定',
+                  callback: action => {
+                    this.$message({
+                      type: 'info',
+                      message: `请输入不同的标题`
+                    });
+                  }
+                });
+              },
   illegalHandleMytitle() {//处理非法输入，直接替换为空
     let rexp=/[<>]/g;
     this.mytitle=this.mytitle.replace(rexp,'')
@@ -114,10 +171,10 @@ export default {
   }
   },
   created:function(){
-    setTimeout(()=>{this.isactive=true},100)
+    setTimeout(()=>{this.isactive=true},100);
   },
   props:[
-     'isdisabled','isshow','toshow','isshowtwo','title','content','srcImfor'
+     'isdisabled','isshow','toshow','isshowtwo','title','content','srcImfor','neworrevise','parentDATE'
   ],
   computed:{
 
@@ -181,7 +238,6 @@ export default {
 }
 .write .sign img{
   display: block;
-  width: 100%;
   height: 100%;
 }
 .write .sign span{

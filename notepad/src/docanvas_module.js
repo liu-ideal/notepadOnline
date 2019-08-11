@@ -27,7 +27,7 @@ var docanvas={
       ctx.clearRect(0,0,mywidth,myheight)
     },false)
   },
-  srcData:null
+  srcData:''
 }
 
 export default docanvas

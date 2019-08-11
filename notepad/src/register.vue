@@ -93,7 +93,8 @@ export default {
         }
   var readydata={
     user:this.register.user,
-    password:this.register.password
+    password:this.register.password,
+    title:'thisispassbutcantdelete'
     // content:'实施的奋斗给过你我哦go诶个欧委会',
     // time:'2019-08-02',
     // img:img
