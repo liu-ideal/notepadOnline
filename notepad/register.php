@@ -2,14 +2,14 @@
 
 <?php
 //--实现注册功能接口--
-header('Access-Control-Allow-Origin:*');
-header('Access-Control-Allow-Methods:HEAD,GET,POST,OPTIONS,PATCH,PUT,DELETE');
-header('Access-Control-Allow-Headers:Origin,X-Requested-With,Authorization,Content-Type,Accept,Z-Key');
+// header('Access-Control-Allow-Origin:*');
+// header('Access-Control-Allow-Methods:HEAD,GET,POST,OPTIONS,PATCH,PUT,DELETE');
+// header('Access-Control-Allow-Headers:Origin,X-Requested-With,Authorization,Content-Type,Accept,Z-Key');
 $mypost=$_POST["data"];
 $mydata=json_decode($mypost);
 function dealWith($sql,$sqlTwo){
   global $mydata;
-  $mysq=new mysqli("localhost","root","","liu");
+  $mysq=new mysqli('b-kygnzrvcwqh9zf.bch.rds.gz.baidubce.com','b_kygnzrvcwqh9zf','liupei0410','b_kygnzrvcwqh9zf');
   if($mysq->connect_error){
     //只要上面的调用表达式不为0说明连接失败
     echo "读取数据库失败，请联系管理员";
@@ -40,8 +40,7 @@ $result=$mysq->query($sql);
   //关闭数据库
   $mysq->close();
 }
-
-$sql="CREATE TABLE `liu`.`{$mydata->user}` ( `password` VARCHAR(20) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL , `title` VARCHAR(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL , `content` TEXT CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL ,`time` VARCHAR(20) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL, `img` TEXT CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL  ) ENGINE = InnoDB;";
+$sql="CREATE TABLE `b_kygnzrvcwqh9zf`.`{$mydata->user}` ( `password` VARCHAR(20) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL , `title` VARCHAR(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL , `content` TEXT CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL ,`time` VARCHAR(20) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL, `img` TEXT CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL  ) ENGINE = InnoDB;";
 $sqlTwo="INSERT INTO `{$mydata->user}` (`password`,`title`) VALUES ('{$mydata->password}','{$mydata->title}');";
 dealWith($sql,$sqlTwo);
  ?>

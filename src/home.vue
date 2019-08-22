@@ -14,7 +14,7 @@
         </ul>
       </div>
     </div>
-<alertContent v-if='toalert' @childValue='childValue' :isdisabled='isdisabled' :isshow='isshow' :toshow='toshow' :isshowtwo='isshowtwo' :title='title' :content='content' @myRegetData='myRegetData' :srcImfor='toChildSrc' :neworrevise='neworrevise' :parentDATE='mydata'/>
+<alertContent v-if='toalert' @childValue='childValue' :isdisabled='isdisabled' :isshow='isshow' :toshow='toshow' :isshowtwo='isshowtwo' :title='title' :content='content' @myregetdata='myregetdataa' :srcImfor='toChildSrc' :neworrevise='neworrevise' :parentDATE='mydata'/>
   </div>
 </template>
 <script>
@@ -49,8 +49,10 @@ export default {
       }
     },
     regetData:function(val,oldVal){//这里是为了让子组件点保存的时候更新这个页面
-      if(this.regetData===true){
+      //console.log(val,oldVal);
+      if(val===true){
         this.getDataFrom();
+        //console.log('1');
         this.regetData=false
       }
     }
@@ -67,23 +69,26 @@ export default {
         // img:img
       };
       var data=JSON.stringify(readydata);
-      axios.post('http://localhost:82/query_all.php','data='+data).then(res=>{
+      axios.post('./query_all.php','data='+data).then(res=>{
           if(!(res.data instanceof Array)){
-
+              //console.log('one',res.data);
           }else{
             var newdata=[];
             if(res.data.length>20){res.data.length=20}//只展示20条数据
             for(var i=1;i<res.data.length;i++){
+              //console.log('ajax',res.data[i]);
               newdata.push(res.data[i])
             }
             this.mydata=newdata;
+            //console.log('two',this.mydata);
 
           }
 
       })
   },
-  myRegetData(value){
-    this.regetData=value
+  myregetdataa(){
+    console.log('emit');
+    this.regetData=!this.regetData;
   },
   childValue(value){
     this.toalert=value
@@ -131,12 +136,10 @@ export default {
                 user:this.$store.state.user,
                 title:this.mydata[index].title
               };
-              console.log('1');
               var data=JSON.stringify(readydata);
-              axios.post('http://localhost:82/delate.php','data='+data).then(res=>{
+              axios.post('./delate.php','data='+data).then(res=>{
               //console.log(res);
                 this.getDataFrom();
-              console.log('2');
               });
               this.$message({
                 type: 'success',
@@ -157,7 +160,7 @@ beforeCreate(){
 },
 created(){
   //这里要获取来自后端传过来的数据进行展示
-  this.getDataFrom()
+  this.getDataFrom();
   if(this.mydata.length==0){
     this.noOne=true
   }else{
@@ -175,13 +178,13 @@ created(){
   background-color: rgb(161, 186, 159);
   position: relative;
 }
-.user_information{
+.wrap .user_information{
   height: 60px;
   line-height: 60px;
   border-bottom: 1px solid rgb(130, 121, 129);
   padding-left: 50px;
 }
-.user_information span{
+.wrap .user_information span{
   font-size: 18px;
   font-weight: bold;
 }

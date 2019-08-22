@@ -88,7 +88,7 @@ export default {
         // img:img
       };
       var data=JSON.stringify(readydata);
-      axios.post('http://localhost:82/login.php','data='+data).then(res=>{
+      axios.post('./login.php','data='+data).then(res=>{
         var expr=/[\r\n]/g;
         if(res.data.replace(expr,'')){
           //进入到这里说明有错误信息了，这个时候应该把错误信息跟新到前端视图
@@ -160,11 +160,11 @@ export default {
     font-size: 30px;
     color: rgb(247, 250, 255);
   }
-  .el-form-item {
+.wrap .el-form-item {
     margin-bottom: 40px;
     position: relative;
   }
-  .el-form-item #checkUser,.el-form-item #checkPassword{
+  .wrap .el-form-item #checkUser,.wrap .el-form-item #checkPassword{
     position: absolute;
     height: 20px;
     top:42px;
@@ -172,26 +172,26 @@ export default {
     color: red;
     font-size: 14px;
   }
-  .el-form {
+  .wrap .el-form {
     padding-top: 20px;
   }
-  .tologin {
+  .wrap .tologin {
     color:rgb(47, 88, 231);
     position: absolute;
     bottom: 10px;
     right: 0;
     text-decoration: none;
   }
-  .tologin:hover{
+.wrap .tologin:hover{
     text-decoration: underline;
     color: rgb(122, 21, 76);
   }
-  .el-checkbox{
+  .wrap .el-checkbox{
     display: block;
     margin-top: -15px;
     margin-left: -15px;
   }
-  .afterSubmitTips{
+  .wrap .afterSubmitTips{
     height: 20px;
     line-height: 20px;
     color: red;

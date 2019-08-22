@@ -1,13 +1,13 @@
 <?php
 //--实现查询所有笔记数据接口--
-header('Access-Control-Allow-Origin:*');
-header('Access-Control-Allow-Methods:HEAD,GET,POST,OPTIONS,PATCH,PUT,DELETE');
-header('Access-Control-Allow-Headers:Origin,X-Requested-With,Authorization,Content-Type,Accept,Z-Key');
+// header('Access-Control-Allow-Origin:*');
+// header('Access-Control-Allow-Methods:HEAD,GET,POST,OPTIONS,PATCH,PUT,DELETE');
+// header('Access-Control-Allow-Headers:Origin,X-Requested-With,Authorization,Content-Type,Accept,Z-Key');
 $mypost=$_POST["data"];
 $mydata=json_decode($mypost);
 function dealWith($sql){
   global $mydata;
-  $mysq=new mysqli("localhost","root","","liu");
+  $mysq=new mysqli('b-kygnzrvcwqh9zf.bch.rds.gz.baidubce.com','b_kygnzrvcwqh9zf','liupei0410','b_kygnzrvcwqh9zf');
   if($mysq->connect_error){
     //只要上面的调用表达式不为0说明连接失败
     echo "读取数据库失败，请联系管理员";

@@ -3,7 +3,6 @@ import register from '../register';
 import login from '../login';
 import home from '../home';
 let router = new Router({
-    mode:'history',
     routes:[
     {path: '*', redirect: '/register'},
     {path:'/register',name:'register',component:register},

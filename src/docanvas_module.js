@@ -1,4 +1,4 @@
-var docanvas={
+var docanvas={//这是签名模块
    writeCanvas:function(clear){
     var canvas=document.querySelector('#canvas');
     var ctx=canvas.getContext('2d');

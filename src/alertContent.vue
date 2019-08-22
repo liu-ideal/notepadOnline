@@ -38,7 +38,6 @@ export default {
     canWrite:false,
     srcData:this.srcImfor,
     lookImg:false,
-    newORrevise:this.neworrevise,
     parentDate:this.parentDATE
     }
   },
@@ -56,7 +55,7 @@ export default {
     var hour=datee.getHours().toString().length==1?0+datee.getHours().toString():datee.getHours().toString();
     var minute=datee.getMinutes().toString().length==1?0+datee.getMinutes().toString():datee.getMinutes().toString();
     var time=`${year}-${month}-${day} ${hour}:${minute}`;
-    if(this.newORrevise==='isNew'){
+    if(this.neworrevise==='isNew'){
       for(var k=0;k<this.parentDate.length;k++){//验证标题不能相同
         if(this.parentDate[k].title===this.mytitle){
             this.open4();
@@ -73,20 +72,22 @@ export default {
         img:imger
       };
       var data=JSON.stringify(readydata);
-      axios.post('http://localhost:82/add.php','data='+data).then(res=>{
+      axios.post('./add.php','data='+data).then(res=>{
         var expr=/[\r\n]/g;
         if(res.data.replace(expr,'')){
           //进入到这里说明有错误信息了，这个时候应该把错误信息跟新到前端视图
           console.log(res.data);
         }else{
           //这里说明新建数据成功，做个消息提示用户就行了
-          this.$emit('myRegetData',true)//这里是告诉父组件需要重新请求数据了
+          console.log('newdate');
+          //this.$emit('myregetdata');//这里是告诉父组件需要重新请求数据了
        this.open2()
         }
       })
       docanvas.srcData='';
+      this.$emit('myregetdata');
     }
-    if(this.newORrevise==='isRevise'){
+    if(this.neworrevise==='isRevise'){
       for(var k=0;k<this.parentDate.length;k++){//验证标题不能相同
         if(this.parentDate[k].title===this.title){continue}
         if(this.parentDate[k].title===this.mytitle){
@@ -102,18 +103,22 @@ export default {
         content:this.mycontent
       };
       var data=JSON.stringify(readydata);
-      axios.post('http://localhost:82/update.php','data='+data).then(res=>{
+      axios.post('./update.php','data='+data).then(res=>{
         var expr=/[\r\n]/g;
         if(res.data.replace(expr,'')){
           //进入到这里说明有错误信息了，这个时候应该把错误信息跟新到前端视图
           console.log(res);
         }else{
           //这里说明新建数据成功，做个消息提示用户就行了
-          this.$emit('myRegetData',true)//这里是告诉父组件需要重新请求数据了
+          console.log('update');
+          //this.$emit('myregetdata');//这里是告诉父组件需要重新请求数据了
+
        this.open3()
         }
-      })
+      });
+      this.$emit('myregetdata');
     }
+
     this.tohid()
     //---------------------
 
@@ -273,7 +278,7 @@ export default {
   background-color: #fff;
 
 }
-.write .el-row{
+.cover_wrap .write .el-row{
   text-align: center;
 }
 #canvas{

@@ -101,7 +101,8 @@ export default {
   };
   var data=JSON.stringify(readydata);
         //然后向后端发送AJAX请求
-  axios.post('http://localhost:82/register.php','data='+data).then(res=>{
+  axios.post('./register.php','data='+data).then(res=>{
+    console.log(res);
     var expr=/用户名已存在/g;
     if(expr.test(res.data)){//如果后端返回字符串包含了用户名已经存在的信息，则更新相关视图
       this.voidSubmit=true;
@@ -156,11 +157,11 @@ export default {
     font-size: 30px;
     color: rgb(247, 250, 255);
   }
-  .el-form-item {
+  .wrap .el-form-item {
     margin-bottom: 40px;
     position: relative;
   }
-  .el-form-item #checkUserr,.el-form-item #checkPasswordd{
+.wrap .el-form-item #checkUserr,.wrap .el-form-item #checkPasswordd{
     position: absolute;
     height: 20px;
     top:42px;
@@ -168,23 +169,23 @@ export default {
     color: red;
     font-size: 14px;
   }
-  .afterSubmitTips{
+.wrap .afterSubmitTips{
     height: 20px;
     line-height: 20px;
     color: red;
     font-size: 14px;
   }
-  .el-form {
+  .wrap .el-form {
     padding-top: 20px;
   }
-  .tologin {
+  .wrap .tologin {
     color:rgb(47, 88, 231);
     position: absolute;
     bottom: 10px;
     right: 0;
     text-decoration: none;
   }
-  .tologin:hover{
+.wrap .tologin:hover{
     text-decoration: underline;
     color: rgb(122, 21, 76);
   }
