@@ -101,7 +101,7 @@ export default {
   };
   var data=JSON.stringify(readydata);
         //然后向后端发送AJAX请求
-  axios.post('../notepad/register.php','data='+data).then(res=>{
+  axios.post('./api?register',data).then(res=>{
     console.log(res);
     var expr=/用户名已存在/g;
     if(expr.test(res.data)){//如果后端返回字符串包含了用户名已经存在的信息，则更新相关视图
