@@ -72,14 +72,14 @@ export default {
         img:imger
       };
       var data=JSON.stringify(readydata);
-      axios.post('./add.php','data='+data).then(res=>{
+      axios.post('./api?add',data).then(res=>{
         var expr=/[\r\n]/g;
         if(res.data.replace(expr,'')){
           //进入到这里说明有错误信息了，这个时候应该把错误信息跟新到前端视图
-          console.log(res.data);
+          //console.log(res.data);
         }else{
           //这里说明新建数据成功，做个消息提示用户就行了
-          console.log('newdate');
+          //console.log('newdate');
           //this.$emit('myregetdata');//这里是告诉父组件需要重新请求数据了
        this.open2()
         }
@@ -103,23 +103,23 @@ export default {
         content:this.mycontent
       };
       var data=JSON.stringify(readydata);
-      axios.post('./update.php','data='+data).then(res=>{
+      axios.post('./api?update',data).then(res=>{
         var expr=/[\r\n]/g;
         if(res.data.replace(expr,'')){
           //进入到这里说明有错误信息了，这个时候应该把错误信息跟新到前端视图
-          console.log(res);
+          //console.log(res);
         }else{
           //这里说明新建数据成功，做个消息提示用户就行了
-          console.log('update');
+          //console.log('update');
           //this.$emit('myregetdata');//这里是告诉父组件需要重新请求数据了
 
-       this.open3()
+       this.open3();
         }
       });
       this.$emit('myregetdata');
     }
 
-    this.tohid()
+    this.tohid();
     //---------------------
 
   },

@@ -9,6 +9,7 @@ import router from './router/index.js'
 import Vuex from 'vuex'
 import store from './store/store.js'
 import axios from 'axios'
+
 Vue.config.productionTip = false
 Vue.use(ElementUi)
 Vue.use(Router)
@@ -26,7 +27,7 @@ router.beforeEach((to,from,next)=>{//全局守卫实现未登录拦截
         // img:img
       };
       var data=JSON.stringify(readydata);
-      axios.post('./login.php','data='+data).then(res=>{
+      axios.post('./api?login',data).then(res=>{
         var expr=/[\r\n]/g;
         if(res.data.replace(expr,'')){
           //进入到这里说明登录信息无效，这个时候应该跳转到登录页面

@@ -42,7 +42,8 @@ module.exports={
       },
       {
         test: /\.vue$/,
-        loader: 'vue-loader'
+        loader: 'vue-loader',
+        exclude:/node_modules/
       },
       {
          test: /\.(png|svg|jpg|gif)$/,
@@ -73,7 +74,7 @@ module.exports={
   resolve: {
   extensions: [".js", ".jsx", ".css",".vue"],
   alias: {
-        'vue$': 'vue/dist/vue.esm.js' //内部为正则表达式  vue结尾的
+        'vue$': 'vue/dist/vue.esm.js' 
     }
 },
   devServer:{

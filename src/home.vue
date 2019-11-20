@@ -8,9 +8,12 @@
         <el-button type="primary" icon="el-icon-edit" @click='newnotepad'>新建笔记</el-button>
       </div>
       <div class="thing_list">
-        <p v-if='noOne'>您还没有任何记事，点击上面按钮新建一个吧...</p>
-        <ul>
-          <li v-for='(item,index) in mydata'><p>{{item.title}}</p><span><i title="查看笔记" class="iconfont icon-chakan" @click='tolook(index)'></i><i class="iconfont icon-xiugai" title="修改笔记" @click='torevise(index)'></i><i><el-button id='special' class="iconfont icon-shanchu" title="删除笔记" @click='todelate(index)'></el-button></i></span><span class="dateSpan">{{item.time}}</span></li>
+        <p v-if='noOne' class="no_one">您还没有任何记事，点击上面按钮新建一个吧...</p>
+        <ul class="left">
+          <li v-for='(item,index) in mydata'><p>{{item.title}}</p></li>
+        </ul>
+        <ul class="right">
+        <li v-for='(item,index) in mydata'><span><i title="查看笔记" class="iconfont icon-chakan" @click='tolook(index)'></i><i class="iconfont icon-xiugai" title="修改笔记" @click='torevise(index)'></i><i><el-button id='special' class="iconfont icon-shanchu" title="删除笔记" @click='todelate(index)'></el-button></i></span><span class="dateSpan">{{item.time}}</span></li>
         </ul>
       </div>
     </div>
@@ -69,11 +72,12 @@ export default {
         // img:img
       };
       var data=JSON.stringify(readydata);
-      axios.post('./query_all.php','data='+data).then(res=>{
+      axios.post('./api?query_all',data).then(res=>{
           if(!(res.data instanceof Array)){
               //console.log('one',res.data);
           }else{
             var newdata=[];
+            //console.log(res);
             if(res.data.length>20){res.data.length=20}//只展示20条数据
             for(var i=1;i<res.data.length;i++){
               //console.log('ajax',res.data[i]);
@@ -87,7 +91,7 @@ export default {
       })
   },
   myregetdataa(){
-    console.log('emit');
+    //console.log('emit');
     this.regetData=!this.regetData;
   },
   childValue(value){
@@ -137,7 +141,7 @@ export default {
                 title:this.mydata[index].title
               };
               var data=JSON.stringify(readydata);
-              axios.post('./delate.php','data='+data).then(res=>{
+              axios.post('./api?delete',data).then(res=>{
               //console.log(res);
                 this.getDataFrom();
               });
@@ -175,7 +179,7 @@ created(){
   width: 70%;
   height: 100%;
   margin: 0 auto;
-  background-color: rgb(161, 186, 159);
+  background-image: linear-gradient(180deg,hsla(0,0%,100%,0) 60%,#fff),linear-gradient(70deg,#dbedff 32%,#ebfff0);
   position: relative;
 }
 .wrap .user_information{
@@ -196,26 +200,45 @@ created(){
 }
 .main .thing_list{
   margin-top: 50px;
+  display: flex;
+  flex-wrap: wrap;
 }
-.main .thing_list p{
+.main .thing_list .no_one{
+  flex-grow: 1;
+  color:#666060;
+
+}
+.main .thing_list .left{
+  width: 35%;
+  font-size: 20px;
+  color: black;
+  font-weight: bold;
+
+}
+.main .thing_list .right{
+  width: 65%;
+
+}
+.main .thing_list .left p{
   display: inline;
+  height: 25px;
 }
 .main .thing_list li{
 margin-top: 20px;
-font-size: 17px;
-color: rgb(73, 77, 76);
+height: 25px;
+line-height: 25px;
 }
 .main .thing_list li span{
   margin-left: 60px;
 }
 .main .thing_list .dateSpan{
   font-size: 12px;
-  color: rgb(44, 43, 47)
+  color: #7e7c7c
 }
 .main .thing_list li span i{
-  font-size: 14px;
-  color: rgb(9, 110, 52);
-  margin-left: 15px;
+  font-size: 16px;
+  color: rgb(41, 57, 48);
+  margin-left: 20px;
   cursor: pointer;
 }
 #special{
@@ -227,8 +250,8 @@ color: rgb(73, 77, 76);
   font-size: inherit;
 }
 .main .thing_list li span i:hover{
-  font-size: 13px;
-  font-weight: bold;
+  font-size: 18px;
+
   color: rgb(10, 56, 250);
 }
 

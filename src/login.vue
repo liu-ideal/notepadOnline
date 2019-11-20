@@ -90,7 +90,6 @@ export default {
       var data=JSON.stringify(readydata);
       axios.post('./api?login',data).then(res=>{
         var expr=/[\r\n]/g;
-        console.log(res)
         if(res.data.replace(expr,'')){
           //进入到这里说明有错误信息了，这个时候应该把错误信息跟新到前端视图
           this.voidSubmit=true;
