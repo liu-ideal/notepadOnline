@@ -81,11 +81,12 @@ export default {
           //这里说明新建数据成功，做个消息提示用户就行了
           //console.log('newdate');
           //this.$emit('myregetdata');//这里是告诉父组件需要重新请求数据了
+          this.$emit('myregetdata');
        this.open2()
         }
       })
       docanvas.srcData='';
-      this.$emit('myregetdata');
+
     }
     if(this.neworrevise==='isRevise'){
       for(var k=0;k<this.parentDate.length;k++){//验证标题不能相同
@@ -114,9 +115,10 @@ export default {
           //this.$emit('myregetdata');//这里是告诉父组件需要重新请求数据了
 
        this.open3();
+       this.$emit('myregetdata');
         }
       });
-      this.$emit('myregetdata');
+
     }
 
     this.tohid();

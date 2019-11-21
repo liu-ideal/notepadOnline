@@ -7,11 +7,14 @@ function toUpdate(username,title,content,time,oldTitle,res){
     database : 'liu'
   });
   connection.connect((err)=>{
-    if (err) throw err
+      if (err) {
+        res.write(err);
+        res.end();
+      }
   });
   let sql="UPDATE `"+username+"` SET `title`='"+title+"', `content`='"+content+"', `time`='"+time+"' WHERE title='"+oldTitle+"';";
   connection.query(sql,(err)=>{
-    if (err) throw err;
+    if (err) {res.write(err);}
     res.end();
   })
   connection.end();

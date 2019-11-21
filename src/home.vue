@@ -84,7 +84,7 @@ export default {
               newdata.push(res.data[i])
             }
             this.mydata=newdata;
-            //console.log('two',this.mydata);
+            console.log('home data',this.mydata);
 
           }
 
