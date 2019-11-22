@@ -1,4 +1,4 @@
-<template>
+<template lang="html">
   <div class="wrap" @click='hidAfterSubmitTips'>
     <el-form label-width="40px">
       <p><i class="iconfont icon-yonghuzhuce"></i><span>用户注册</span></p>
@@ -119,7 +119,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="css" scoped>
 @media screen and (min-width:768px){
   .wrap{
     width: 400px;

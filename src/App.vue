@@ -1,4 +1,4 @@
-<template>
+<template lang="html">
   <div id="app">
     <router-view/>
   </div>
@@ -10,7 +10,7 @@ export default {
 }
 </script>
 
-<style>
+<style lang="css">
 *{
   margin: 0;
   padding: 0;

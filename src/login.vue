@@ -1,4 +1,4 @@
-<template>
+<template lang="html">
   <div class="wrap" @click='hidAfterSubmitTips'>
     <el-form label-width="40px" class="demo-ruleForm">
       <p><i class="iconfont icon-zhucedengluyonghuming"></i><span>欢迎登录</span></p>
@@ -122,7 +122,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="css" scoped>
 @media screen and (min-width:768px){
   .wrap{
     width: 400px;

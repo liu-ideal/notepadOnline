@@ -2,11 +2,12 @@ const path = require('path');
 const MiniCssExtractPlugin =require('mini-css-extract-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const VueLoaderPlugin = require('vue-loader/lib/plugin');
+const webpack = require('webpack');
 module.exports={
   entry:"./src/main.js",
   output:{
-    filename:"[name].bundle.js",
-    chunkFilename: '[name].bundle.js',
+    filename:"[id]-[name]-[hash].js",
+    chunkFilename: '[id]-[name]-[hash].js',
     path:path.resolve(__dirname,'./dist')
   },
   mode:'production',
@@ -25,7 +26,12 @@ module.exports={
       {
         test:/\.css$/,
         use:[
-          {loader:'style-loader'},
+          {loader: MiniCssExtractPlugin.loader,
+             options:{
+               hmr: process.env.NODE_ENV === 'production'
+             }
+          },
+
           {loader:'css-loader',options:{modules:false}}
         ]
       },
@@ -43,7 +49,9 @@ module.exports={
       },
       {
         test: /\.vue$/,
-        loader: 'vue-loader',
+        use:[
+          {loader: 'vue-loader'}
+        ],
         exclude:/node_modules/
       },
       {
@@ -74,7 +82,12 @@ module.exports={
         minifyCSS: true
       }
     }),
-    new VueLoaderPlugin()
+    new VueLoaderPlugin(),
+    new MiniCssExtractPlugin({
+      filename: '[name].[hash].css',
+      chunkFilename: '[id].[hash].css',
+      ignoreOrder: false
+    })
   ],
   resolve: {
   extensions: [".js", ".jsx", ".css",".vue"],
@@ -82,4 +95,5 @@ module.exports={
         'vue$': 'vue/dist/vue.esm.js'
     }
 }
+
 }
