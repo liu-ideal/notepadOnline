@@ -1,10 +1,11 @@
 const http = require('http');
 const url = require('url');
 const path = require('path');
+const fs = require('fs');
 const server=http.createServer((req,res)=>{
-  res.setHeader('Content-Type', 'text/html; charset=utf-8');
-       if(req.method==='POST'){
 
+       if(req.method==='POST'){
+       res.setHeader('Content-Type', 'text/html; charset=utf-8');
        switch (url.parse(req.url).query) {
          case 'register':{
            const register =require('./register.js');
@@ -85,8 +86,43 @@ const server=http.createServer((req,res)=>{
          }
        }
      }else{
-       res.write('禁止访问');
-       res.end()
+       let contentType={
+         ".html":"text/html",
+         ".jpeg":"image/jpeg",
+         ".jpg":"image/jpeg",
+         ".png":"image/png",
+         ".ico":"image/x-icon",
+         ".css":"text/css",
+         ".js":"application/x-javascript",
+         ".mp3":"audio/mp3",
+         ".pdf":"application/pdf"
+       };
+       let queryUrl=url.parse(req.url).path;
+       let rootPath=path.resolve(__dirname,'../','../');
+       let filePath=path.join(rootPath,queryUrl);
+       if(fs.existsSync(filePath)){
+           fs.stat(filePath,(err,stat)=>{
+             if (err){console.log(err)}
+             if(stat.isDirectory()){
+               res.writeHead(404, { 'Content-Type': 'text/plain'});
+               res.write('404 资源不存在');
+               res.end();
+             }else{
+               let fileType=path.extname(filePath);
+               if(contentType[fileType]){
+                 res.writeHead(200, { 'Content-Type': contentType[fileType] });
+             }else{res.writeHead(200, { 'Content-Type': 'text/plain' });}
+               res.write(fs.readFileSync(filePath));
+               res.end();
+             }
+           });
+       }else{
+         res.writeHead(404, { 'Content-Type': 'text/plain'});
+         res.write('404 资源不存在');
+         res.end();
+       }
+
+
      }
 
 })
