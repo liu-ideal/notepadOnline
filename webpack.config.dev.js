@@ -25,7 +25,8 @@ module.exports={
         test:/\.css$/,
         use:[
           {loader:'style-loader'},
-          {loader:'css-loader',options:{modules:false}}
+          {loader:'css-loader',options:{modules:false}},
+          {loader:"postcss-loader",options:{plugins:[require('autoprefixer')]}}
         ]
       },
       {
@@ -68,13 +69,14 @@ module.exports={
     new HtmlWebpackPlugin({
       template:'./index.html'
     }),
-    new VueLoaderPlugin()
+    new VueLoaderPlugin(),
+    require('autoprefixer')
   ],
   devtool: 'cheap-module-eval-source-map',
   resolve: {
   extensions: [".js", ".jsx", ".css",".vue"],
   alias: {
-        'vue$': 'vue/dist/vue.esm.js' 
+        'vue$': 'vue/dist/vue.esm.js'
     }
 },
   devServer:{

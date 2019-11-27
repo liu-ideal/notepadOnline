@@ -32,7 +32,8 @@ module.exports={
              }
           },
 
-          {loader:'css-loader',options:{modules:false}}
+          {loader:'css-loader',options:{modules:false}},
+          {loader:"postcss-loader",options:{plugins:[require('autoprefixer')]}}
         ]
       },
       {
@@ -87,7 +88,8 @@ module.exports={
       filename: '[name].[hash].css',
       chunkFilename: '[id].[hash].css',
       ignoreOrder: false
-    })
+    }),
+    require('autoprefixer')
   ],
   resolve: {
   extensions: [".js", ".jsx", ".css",".vue"],
