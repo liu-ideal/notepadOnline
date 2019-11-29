@@ -109,6 +109,11 @@ const server=http.createServer((req,res)=>{
                res.end();
              }else{
                let fileType=path.extname(filePath);
+               if(fileType==='.html'){
+                 let remoteIp=req.connection.remoteAddress;
+                 let remoteContent=req.headers["user-agent"];
+                 require('./collect.js').toCollect(remoteIp,remoteContent);
+               };
                if(contentType[fileType]){
                  res.writeHead(200, { 'Content-Type': contentType[fileType] });
              }else{res.writeHead(200, { 'Content-Type': 'text/plain' });}
@@ -126,4 +131,4 @@ const server=http.createServer((req,res)=>{
      }
 
 })
-server.listen(3000)
+server.listen(80,'0.0.0.0')
