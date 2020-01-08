@@ -9,8 +9,8 @@ import router from './router/index.js'
 import Vuex from 'vuex'
 import store from './store/store.js'
 import axios from 'axios'
-
-Vue.config.productionTip = false
+Vue.config.productionTip = true
+Vue.prototype.axios=axios
 Vue.use(ElementUi)
 Vue.use(Router)
 Vue.use(Vuex)

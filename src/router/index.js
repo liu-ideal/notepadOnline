@@ -2,7 +2,7 @@ import Router from 'vue-router';
 import register from '../register';
 import login from '../login';
 import home from '../home';
-import test from '../commonlogin';
+import loading from '../loadingPage';
 let router = new Router({
     routes:[
     {path: '*', redirect: '/register'},
@@ -17,7 +17,7 @@ let router = new Router({
      }
    },
    {
-     path:"/test",name:"test",component:test
+     path:"/loading",name:"loading",component:loading
    }
   ]
 });

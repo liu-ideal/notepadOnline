@@ -86,7 +86,7 @@ module.exports={
     hot:true,
     host:"127.0.0.1",
     proxy: {
-  "/api": "http://localhost:3000"
+  "/api": "http://103.210.237.23"
 }
   }
 }

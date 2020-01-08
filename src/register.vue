@@ -1,193 +1,87 @@
 <template lang="html">
-  <div class="wrap" @click='hidAfterSubmitTips'>
-    <el-form label-width="40px">
-      <p><i class="iconfont icon-yonghuzhuce"></i><span>用户注册</span></p>
-      <el-form-item label="帐号" prop="pass">
-        <el-input type="text" autocomplete="on" placeholder='请输入注册帐号' v-model="register.user" maxlength='12' @blur='checkUser' @focus='lookCheckUser'></el-input>
-          <div id='checkUserr' v-show='voidUser'>{{userTips}}</div>
-      </el-form-item>
-      <el-form-item label="密码" >
-        <el-input type="password" autocomplete="off" placeholder='请输入注册密码' v-model="register.password" @blur='checkPass' maxlength='12' @focus='lookCheckPass'></el-input>
-        <div id='checkPasswordd' v-show='voidPassword'>{{passTips}}</div>
-      </el-form-item>
-      <el-form-item>
-        <el-button type="primary" @click.stop="toRegister" v-loading.fullscreen.lock="fullscreenLoading">注册</el-button>
-        <el-button @click="resetForm">重置</el-button>
-      </el-form-item>
-    </el-form>
-    <div class="afterSubmitTips" v-show='voidSubmit'>{{afterSubmitTips}}</div>
-   <router-link to="/login" class="tologin">已有帐号，点此登录</router-link>
-  </div>
+    <commonlogin :option="options" :verify="toVerify" :submit="toSubmit" :changePage="goLogin"></commonlogin>
 </template>
 
 <script>
-import axios from 'axios'
+import commonlogin from "./commonlogin.vue"
 export default {
-  name: 'register',
+  name:"fff",
   data(){
     return{
-      fullscreenLoading: false,
-       register:{
-         user:'',
-         password:''
-       },
-       voidUser:false,
-       voidPassword:false,
-       voidSubmit:true,
-       userTips:'',
-       passTips:'',
-       afterSubmitTips:''
+      options:{
+        title:"注册",
+        userholder:"请输入注册的用户名",
+        passholder:"请输入注册的密码",
+        remenber:false,
+        submit:"注册",
+        tips:"用户名、密码只能包含数字或字母 且长度小于10",
+        changePageTitle:"已有帐号-去登录"
+      }
     }
   },
+  components:{
+    commonlogin
+  },
   methods:{
-    openFullScreen() {
-        this.fullscreenLoading = true;
-        setTimeout(() => {
-          this.fullscreenLoading = false;
-          this.open();
-          this.$router.push({path:'/login'})//跳转到登录页面
-        }, 500);
-      },
-    open(){
-        this.$message({
-          message: '恭喜你，注册成功-请登录',
-          type: 'success'
-        });
-      },
-    resetForm() {
-        this.register.user='';
-        this.register.password='';
-      },
-      checkUser(){
-        if(!this.register.user){
-          this.voidUser=true;
-          this.userTips='用户名不能为空'
-        }
-        if(this.register.user.indexOf(' ')!=-1){
-          this.voidUser=true;
-          this.userTips='用户名不能包含空格'
-        }
-      },
-      checkPass(){
-        if(!this.register.password){
-          this.voidPassword=true;
-          this.passTips='密码不能为空'
-        }
-        if(this.register.password.indexOf(' ')!=-1){
-          this.voidPassword=true;
-          this.passTips='密码不能包含空格'
-        }
-      },
-      lookCheckUser(){
-        this.voidUser=false
-      },
-      lookCheckPass(){
-        this.voidPassword=false
-      },
-      toRegister(){
-        //首先对用户输入信息要求不能为空和包含空格
-        if(!this.register.user||!this.register.password||(this.register.user.indexOf(' ')!=-1)||(this.register.password.indexOf(' ')!=-1)){
-          this.voidSubmit=true;
-          this.afterSubmitTips='用户名或密码不合法';
-          return
-        }
-  var readydata={
-    user:this.register.user,
-    password:this.register.password,
-    title:'thisispassbutcantdelete'
-    // content:'实施的奋斗给过你我哦go诶个欧委会',
-    // time:'2019-08-02',
-    // img:img
-  };
-  var data=JSON.stringify(readydata);
-        //然后向后端发送AJAX请求
-  axios.post('./api?register',data).then(res=>{
-    console.log(res);
-    var expr=/用户名已存在/g;
-    if(expr.test(res.data)){//如果后端返回字符串包含了用户名已经存在的信息，则更新相关视图
-      this.voidSubmit=true;
-      this.afterSubmitTips='用户名已存在';
-    }else{//这里表示注册成功了，应该进行相关操作了
-      this.openFullScreen();//loading动画 并跳转页面
-    }
-  })
-      },
-      hidAfterSubmitTips(){
-        this.voidSubmit=false;
+    toVerify(username,password){
+      let isOk=this.onlyNumLetter(username)&&this.onlyNumLetter(password)&&username&&password&&username.length<10&&password.length<10;
+      if(isOk){
+        return true
+      }else{
+        return false
       }
+    },
+    toSubmit(username,password){
+      if(this.toVerify(username,password)){
+        let readydata={
+          user:username,
+          password:password,
+          title:'thisispassbutcantdelete'
+          // content:'实施的奋斗给过你我哦go诶个欧委会',
+          // time:'2019-08-02',
+          // img:img
+        };
+        let data=JSON.stringify(readydata);
+        this.axios.post('./api?register',data).then(res=>{
+          //console.log(res);
+          let expr=/用户名已存在/g;
+          if(expr.test(res.data)){//如果后端返回字符串包含了用户名已经存在的信息，则更新相关视图
+            this.$alert('用户名已存在', '警告', {
+                confirmButtonText: '确定',
+                callback: action => {
+                  this.$message({
+                    type: 'info',
+                    message: `请重新输入用户名`
+                  });
+                }
+              });
+          }else{//这里表示注册成功了，应该进行相关操作了
+            this.$message({
+              type: 'success',
+              message: `注册成功 请登录`,
+              duration:2000
+            });
+            this.$router.push({name:'loading',params:{type:"login"}})//跳转到登录页面
+          }
+        })
+      }else{
+        return ;
+      }
+    },
+    goLogin(){
+      this.$message({
+        message: `请输入登录用户名和密码`,
+        duration:2000
+      });
+     this.$router.push({path:"/login"})
+    },
+    onlyNumLetter(value){
+      let exp=/[^0-9|a-z|A-Z]/;
+      return !exp.test(value);
+    }
   }
 }
 </script>
 
-<style lang="css" scoped>
-@media screen and (min-width:768px){
-  .wrap{
-    width: 400px;
-    height: 400px;
-  }
-}
-@media screen and (max-width:767px){
-  .wrap{
-    width: 100%;
-    height: 60%;
-  }
-}
-.wrap{
-  position: absolute;
-  top:0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  margin: auto;
-  background-color: orange;
-  text-align: center;
-  box-sizing: border-box;
-  padding: 0 20px;
-}
-  .wrap p{
-    padding: 20px 0;
-  }
-  .wrap span{
-    font-size: 20px;
-    font-weight: bold;
-    padding-left: 20px;
-    vertical-align: text-bottom;
-  }
-  .wrap .iconfont{
-    font-size: 30px;
-    color: rgb(247, 250, 255);
-  }
-  .wrap .el-form-item {
-    margin-bottom: 40px;
-    position: relative;
-  }
-.wrap .el-form-item #checkUserr,.wrap .el-form-item #checkPasswordd{
-    position: absolute;
-    height: 20px;
-    top:42px;
-    line-height: 20px;
-    color: red;
-    font-size: 14px;
-  }
-.wrap .afterSubmitTips{
-    height: 20px;
-    line-height: 20px;
-    color: red;
-    font-size: 14px;
-  }
-  .wrap .el-form {
-    padding-top: 20px;
-  }
-  .wrap .tologin {
-    color:rgb(47, 88, 231);
-    position: absolute;
-    bottom: 10px;
-    right: 0;
-    text-decoration: none;
-  }
-.wrap .tologin:hover{
-    text-decoration: underline;
-    color: rgb(122, 21, 76);
-  }
-
+<style lang="scss" scoped>
 </style>
