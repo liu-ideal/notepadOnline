@@ -80,6 +80,26 @@ const server=http.createServer((req,res)=>{
            })
          break;
          }
+         case 'token':{
+           let postData='';
+           req.on('data',(data)=>{
+             postData+=data
+           })
+           req.on('end',()=>{
+             let mydata=JSON.parse(postData);
+             if(req.headers.tokenid){
+              let result= jwt.verify(req.headers.tokenid,"home");
+            if(result.username===mydata.user){
+              res.end("homeok");
+            }else{
+              res.end("");
+            }
+          }else{
+            res.end("");
+          }
+           })
+            break;
+         }
          default:{
            res.write('查询地址有误');
            res.end()

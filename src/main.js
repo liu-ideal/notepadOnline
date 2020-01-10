@@ -16,28 +16,29 @@ Vue.use(Router)
 Vue.use(Vuex)
 router.beforeEach((to,from,next)=>{//全局守卫实现未登录拦截
   if(to.meta.requireAuth){
-    if(from.name=='login'){//如果是从登录页面跳转过来的 就不用验证了
-      next()
-    }else{
       var readydata={
-        user:store.state.user,
-        password:store.state.pass
+        user:store.state.user
         // content:'实施的奋斗给过你我哦go诶个欧委会',
         // time:'2019-08-02',
         // img:img
       };
-      var data=JSON.stringify(readydata);
-      axios.post('./api?login',data).then(res=>{
-        var expr=/[\r\n]/g;
-        if(res.data.replace(expr,'')){
-          //进入到这里说明登录信息无效，这个时候应该跳转到登录页面
-         next({path:'/login'})
-        }else{
-          //这里说明登录信息有效 跳转路由了
-      next()
-        }
-      })
-    }
+      let data=JSON.stringify(readydata);
+      let token=localStorage.getItem("tokenid");
+      if(token){
+        axios.post('./api?token',data,{headers:{'tokenid':token}}).then(res=>{
+          //let expr=/[\r\n]/g;
+          let expr=/homeok/g;
+          if(!expr.test(res.data)){
+            //进入到这里说明登录信息无效，这个时候应该跳转到登录页面
+           next({path:'/login'})
+          }else{
+            //这里说明登录信息有效 跳转路由了
+          next()
+          }
+        })
+      }else{
+        next({path:'/login'})
+      }
   }else{
     next()
   }
