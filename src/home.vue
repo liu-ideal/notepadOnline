@@ -1,7 +1,7 @@
 <template lang="html">
   <div class="wrap">
     <div class="user_information">
-      欢迎你  用户 <span>{{this.$store.state.user}}</span>
+      <p class="info">欢迎你  用户 <span>{{this.$store.state.user}}</span></p><p class="exit" @click="killAccount">注销(删除)该账户</p>
     </div>
     <div class="main">
       <div class="new_build_thing">
@@ -64,18 +64,44 @@ export default {
     alertContent
   },
   methods:{
-  getDataFrom(){
+    killAccount(){
       var readydata={
-        user:this.$store.state.user
+        user:this.$store.state.user||""
         // content:'实施的奋斗给过你我哦go诶个欧委会',
         // time:'2019-08-02',
         // img:img
       };
+      if(!readydata.user){this.$router.push({path:"/login"}); return}
+      var data=JSON.stringify(readydata);
+      axios.post('./api?kill',data).then(res=>{
+        this.$router.push({path:"/register"});
+        localStorage.removeItem("username");
+        localStorage.removeItem("tokenid");
+        localStorage.removeItem("remember");
+        this.$message({
+          type: 'success',
+          message: `用户已成功删除 谢谢`,
+          duration:2000
+        });
+      })
+    },
+  getDataFrom(){
+    //console.log("1");
+      var readydata={
+        user:this.$store.state.user||""
+        // content:'实施的奋斗给过你我哦go诶个欧委会',
+        // time:'2019-08-02',
+        // img:img
+      };
+      if(!readydata.user){this.$router.push({path:"/login"}); return}
       var data=JSON.stringify(readydata);
       axios.post('./api?query_all',data).then(res=>{
+        //console.log("2");
           if(!(res.data instanceof Array)){
+            //console.log("3");
               //console.log('one',res.data);
           }else{
+            //console.log("4");
             var newdata=[];
             //console.log(res);
             if(res.data.length>20){res.data.length=20}//只展示20条数据
@@ -84,15 +110,14 @@ export default {
               newdata.push(res.data[i])
             }
             this.mydata=newdata;
-            console.log('home data',this.mydata);
-
           }
 
       })
   },
   myregetdataa(){
     //console.log('emit');
-    this.regetData=!this.regetData;
+    //this.regetData=!this.regetData;
+    this.getDataFrom();
   },
   childValue(value){
     this.toalert=value
@@ -150,8 +175,6 @@ export default {
                 message: '删除成功!'
               });
             }).catch(() => {
-
-
               this.$message({
                 type: 'info',
                 message: '已取消删除'
@@ -164,6 +187,7 @@ beforeCreate(){
 },
 created(){
   //这里要获取来自后端传过来的数据进行展示
+  this.$store.commit("findUser",localStorage.getItem("username"));
   this.getDataFrom();
   if(this.mydata.length==0){
     this.noOne=true
@@ -175,8 +199,17 @@ created(){
 </script>
 
 <style lang="css" scoped>
+@media screen and (min-width:751px) {
+  .wrap{
+    width: 70%;
+  }
+}
+@media screen and (max-width:750px) {
+  .wrap{
+    width: 100%;
+  }
+}
 .wrap{
-  width: 70%;
   height: 100%;
   margin: 0 auto;
   background-image: linear-gradient(180deg,hsla(0,0%,100%,0) 60%,#fff),linear-gradient(70deg,#dbedff 32%,#ebfff0);
@@ -187,6 +220,19 @@ created(){
   line-height: 60px;
   border-bottom: 1px solid rgb(130, 121, 129);
   padding-left: 50px;
+  overflow: hidden;
+}
+.wrap .user_information .info{
+  float: left;
+}
+.wrap .user_information .exit{
+  margin-right: 25px;
+  float: right;
+  color: red;
+  cursor: pointer;
+}
+.wrap .user_information .exit:hover{
+  text-decoration: underline;
 }
 .wrap .user_information span{
   font-size: 18px;
@@ -208,16 +254,24 @@ created(){
   color:#666060;
 
 }
+@media screen and (min-width:751px) {
+  .main .thing_list .left{
+    font-size: 20px;
+  }
+}
+@media screen and (max-width:750px) {
+  .main .thing_list .left{
+    font-size: 23px;
+  }
+}
 .main .thing_list .left{
   width: 35%;
-  font-size: 20px;
   color: black;
   font-weight: bold;
 
 }
 .main .thing_list .right{
   width: 65%;
-
 }
 .main .thing_list .left p{
   display: inline;
@@ -231,12 +285,31 @@ line-height: 25px;
 .main .thing_list li span{
   margin-left: 60px;
 }
+@media screen and (min-width:751px) {
+  .main .thing_list li span i{
+    font-size: 13px;
+  }
+}
+@media screen and (max-width:750px) {
+  .main .thing_list li span i{
+    font-size: 15px;
+  }
+}
 .main .thing_list .dateSpan{
-  font-size: 12px;
+
   color: #7e7c7c
 }
+@media screen and (min-width:751px) {
+  .main .thing_list li span i{
+    font-size: 16px
+  }
+}
+@media screen and (max-width:750px) {
+  .main .thing_list li span i{
+    font-size: 18px
+  }
+}
 .main .thing_list li span i{
-  font-size: 16px;
   color: rgb(41, 57, 48);
   margin-left: 20px;
   cursor: pointer;

@@ -22,7 +22,6 @@ export default {
         if(this.$route.params.type==="login"){
           this.$router.push({path:'/login'});
         }else if(this.$route.params.type==="home"){
-          console.log("home");
           this.$router.push({path:'/home'});
         }else{
           this.$router.push({path:'/register'});

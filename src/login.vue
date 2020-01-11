@@ -1,5 +1,5 @@
 <template lang="html">
-    <commonlogin :option="options" :verify="toVerify" :submit="toSubmit" :changePage="goLogin"></commonlogin>
+    <commonlogin :option="options" :verify="toVerify" :submit="toSubmit" :changePage="goLogin" :receiveRemenber="receiveRemenber"></commonlogin>
 </template>
 
 <script>
@@ -15,8 +15,15 @@ export default {
         remenber:true,
         submit:"登录",
         tips:"用户名、密码只能包含数字或字母 且长度小于10",
-        changePageTitle:"前往注册"
-      }
+        changePageTitle:"前往注册",
+        defaultUser:""
+      },
+      remember:""
+    }
+  },
+  mounted(){
+    if(localStorage.getItem("remember")==="yes"){
+      this.options.defaultUser=localStorage.getItem("username");
     }
   },
   components:{
@@ -54,11 +61,10 @@ export default {
               });
           }else{
             //这里说明登录成功，应该加载LOADING,跳转路由了 还要先对记住帐号做一个处理
-            // if(this.login.checked){
-            //   localStorage.setItem('user',readydata.user)
-            // }
-            // sessionStorage.setItem('user',readydata.user);
-            // sessionStorage.setItem('pass',readydata.password);
+            localStorage.setItem("remember","not");
+            if(this.remember){
+              localStorage.setItem('remember',"yes")
+            }
             localStorage.setItem("tokenid",res.data.tokenid);
             localStorage.setItem("username",readydata.user);
             this.$store.commit('findUser',readydata.user);//将VUEX中的user更新 以便在home页面使用
@@ -85,6 +91,9 @@ export default {
     onlyNumLetter(value){
       let exp=/[^0-9|a-z|A-Z]/;
       return !exp.test(value);
+    },
+    receiveRemenber(value){
+      this.remember=value;
     }
   }
 }

@@ -17,7 +17,7 @@ Vue.use(Vuex)
 router.beforeEach((to,from,next)=>{//全局守卫实现未登录拦截
   if(to.meta.requireAuth){
       var readydata={
-        user:store.state.user
+        user:localStorage.getItem("username")
         // content:'实施的奋斗给过你我哦go诶个欧委会',
         // time:'2019-08-02',
         // img:img

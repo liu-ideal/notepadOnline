@@ -187,7 +187,13 @@ export default {
 
   },
   mounted(){
-    docanvas.writeCanvas('.clear')//这里是原生事件绑定
+    let isMobile = /Android|webOS|iPhone|iPod|BlackBerry/i.test(navigator.userAgent);
+    if(isMobile){
+      docanvas.writeCanvasMobile('.clear');
+    }else{
+      docanvas.writeCanvas('.clear');//这里是原生事件绑定
+    }
+
   }
 }
 </script>

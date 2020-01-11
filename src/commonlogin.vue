@@ -9,14 +9,14 @@
     </div>
     <div class="password">
       <p>Password:</p>
-        <input type="password" name="" v-model="password" :placeholder="option.passholder" @keyup="verify(username,password)">
+        <input type="password" name="" v-model="password" :placeholder="option.passholder" @keyup="verify(username,password)" @keyup.enter="submit(username,password)">
     </div>
     <div class="verify_tips">
         {{!verify(username,password)?option.tips:""}}
     </div>
     <div class="remenber_submit">
         <div class="remenber" v-if="option.remenber">
-          <label><input type="checkbox" name="" value="">记住帐号和密码</label>
+          <label><input type="checkbox" name="" value="" v-model="remenber">记住用户名</label>
         </div>
         <div class="submit">
           <button type="button" name="button" @click="submit(username,password)">{{option.submit}}</button>
@@ -31,11 +31,12 @@
 <script>
 export default {
   name:"commonlogin",
-  props:["option","verify","submit","changePage"],
+  props:["option","verify","submit","changePage","receiveRemenber"],
   data(){
     return{
       username:"",
-      password:""
+      password:"",
+      remenber:false
     }
   },
   computed:{
@@ -48,7 +49,17 @@ export default {
         }
       }
     }
+  },
+  watch:{
+    remenber(value){
+      this.receiveRemenber(value);
+    },
+    "option.defaultUser"(value){
+      this.username=value;
+    }
   }
+
+
 }
 </script>
 
@@ -172,6 +183,10 @@ export default {
           margin-top: 20px;
           margin-left: 20px;
           font-size: 14px;
+          input{
+            margin-right: 8px;
+            vertical-align: -1px;
+          }
         }
         .submit{
           float: right;
