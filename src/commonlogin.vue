@@ -27,7 +27,6 @@
 <p class="changePage" @click="changemyPage">{{option.changePageTitle}}</p>
 </div>
 </template>
-
 <script>
 export default {
   name:"commonlogin",

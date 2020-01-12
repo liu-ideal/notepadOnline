@@ -175,6 +175,9 @@ export default {
     this.hidSign=false;
     this.canWrite=true;
     this.hidRename=true;
+  },
+  stopSlide(e){
+    e.preventDefault();
   }
   },
   created:function(){
@@ -188,12 +191,16 @@ export default {
   },
   mounted(){
     let isMobile = /Android|webOS|iPhone|iPod|BlackBerry/i.test(navigator.userAgent);
+    document.documentElement.addEventListener("touchmove",this.stopSlide,{ passive: false})
     if(isMobile){
       docanvas.writeCanvasMobile('.clear');
     }else{
       docanvas.writeCanvas('.clear');//这里是原生事件绑定
     }
 
+  },
+  destroyed(){
+    document.documentElement.removeEventListener("touchmove",this.stopSlide,{passive: true});
   }
 }
 </script>
@@ -223,9 +230,17 @@ export default {
   transition: all 0.2s;
   overflow: hidden;
 }
-.write.active{
-  width: 400px;
-  height: 400px;
+@media screen and (min-width:751px) {
+  .write.active{
+    width: 400px;
+    height: 400px;
+  }
+}
+@media screen and (max-width:750px) {
+  .write.active{
+    width: 600px;
+    height: 600px;
+  }
 }
 .write .write_title{
   width: 100%;
