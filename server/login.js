@@ -1,4 +1,5 @@
 const mysql = require('mysql');
+const jwt = require('jsonwebtoken');
 function toLogin(username,password,res){
   let connection=mysql.createConnection({
     host     : 'localhost',
@@ -27,7 +28,14 @@ function toLogin(username,password,res){
       connection.query(sqlQuery,(err,results,fields)=>{
         if (err) throw err;
         if(results[0].password===password){
-          res.end();
+          try {
+            let token=jwt.sign({username:tableName},"home",{expiresIn: 86400});
+            let tokenObj={tokenid:token};
+            let mytoken=JSON.stringify(tokenObj);
+            res.end(mytoken);
+          } catch (e) {
+            res.end(e);
+          }
           return
         }
         res.write("用户名或密码不正确")

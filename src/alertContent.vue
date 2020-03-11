@@ -81,8 +81,11 @@ export default {
           //这里说明新建数据成功，做个消息提示用户就行了
           //console.log('newdate');
           //this.$emit('myregetdata');//这里是告诉父组件需要重新请求数据了
+          console.log("readynew");
+          this.open2()
           this.$emit('myregetdata');
-       this.open2()
+          this.tohid();
+       
         }
       })
       docanvas.srcData='';
@@ -116,12 +119,11 @@ export default {
 
        this.open3();
        this.$emit('myregetdata');
+       this.tohid();
         }
       });
 
     }
-
-    this.tohid();
     //---------------------
 
   },

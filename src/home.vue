@@ -98,10 +98,10 @@ export default {
       axios.post('./api?query_all',data).then(res=>{
         //console.log("2");
           if(!(res.data instanceof Array)){
-            //console.log("3");
+            
               //console.log('one',res.data);
           }else{
-            //console.log("4");
+            
             var newdata=[];
             //console.log(res);
             if(res.data.length>20){res.data.length=20}//只展示20条数据
@@ -115,7 +115,7 @@ export default {
       })
   },
   myregetdataa(){
-    //console.log('emit');
+    
     //this.regetData=!this.regetData;
     this.getDataFrom();
   },
